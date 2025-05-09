@@ -17,7 +17,9 @@ export default async function handler(req, res) {
         const data = doc.data();
         let creator = null;
         if (data.visibleCreator && data.creatorId) {
-          const creatorSnap = await data.creatorId.get();
+          if (data.creatorId?.path) {
+            const creatorSnap = await db.doc(data.creatorId.path).get();
+          }
           if (creatorSnap.exists) {
             creator = { id: creatorSnap.id, ...creatorSnap.data() };
           }

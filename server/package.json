@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
     "setup-schema": "node schemaSetup.js",
+    "start": "node -r dotenv/config index.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],

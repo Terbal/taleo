@@ -25,8 +25,8 @@ function Home() {
       <ul>
         {histoires.map((story) => (
           <li key={story.id}>
-            <h2>{story.titre}</h2>
-            <p>{story.contenu}</p>
+            <h2>{story.title}</h2>
+            <p>{story.theme}</p>
             <small>Thème : {story.theme}</small>
           </li>
         ))}
