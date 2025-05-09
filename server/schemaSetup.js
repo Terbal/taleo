@@ -1,7 +1,7 @@
 // server/schemaSetup.js
 import fs from "fs";
 import admin from "firebase-admin";
-import { db } from "./firebase.js"; // importe ton firebase.js existant
+import { db } from "./firebase.js";
 
 async function setupSchema() {
   // 1) COLLECTION "users"
@@ -18,7 +18,7 @@ async function setupSchema() {
   await storyRef.set({
     title: "Ma première histoire",
     theme: "Fantasy",
-    creatorId: userRef, // référence vers users/user-test1
+    creatorId: userRef.path, // stocke le chemin "users/user-test1"
     visibleCreator: false,
     voteIntervalHours: 12,
     paragraphMin: 3,
@@ -42,8 +42,8 @@ async function setupSchema() {
   ];
   for (const p of paragraphsData) {
     await db.collection("paragraphs").doc(p.id).set({
-      storyId: storyRef, // référence vers stories/story-test1
-      userId: userRef, // référence vers users/user-test1
+      storyId: storyRef.path, // stocke "stories/story-test1"
+      userId: userRef.path, // stocke "users/user-test1"
       content: p.content,
       voteStage: p.voteStage,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -58,8 +58,8 @@ async function setupSchema() {
       .collection("votes")
       .doc(voteId)
       .set({
-        paragraphId: db.collection("paragraphs").doc(p.id),
-        userId: userRef,
+        paragraphId: db.collection("paragraphs").doc(p.id).path, // chemin "paragraphs/para-1"
+        userId: userRef.path,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
   }
