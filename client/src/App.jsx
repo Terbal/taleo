@@ -1,19 +1,22 @@
+// client/src/App.jsx
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 import { StoriesProvider } from "./contexts/StoriesContext";
-import { ThemeProvider } from "@mui/material";
-import theme from "./theme/theme";
+import { ThemeProvider } from "./contexts/ThemeContext"; // ← TON provider
+import Navbar from "./components/Navbar";
 
-function App() {
+export default function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
+      {" "}
+      {/* Utilise TON ThemeProvider */}
       <StoriesProvider>
         <BrowserRouter>
+          <Navbar />
           <AppRoutes />
         </BrowserRouter>
       </StoriesProvider>
     </ThemeProvider>
   );
 }
-
-export default App;

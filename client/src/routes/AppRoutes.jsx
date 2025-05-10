@@ -10,7 +10,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/story/:id" element={<StoryDetail />} />
-      <Route path="/story/:id/contrib" element={<Contribute />} />
+      <Route path="/story/:id/contribute" element={<Contribute />} />
       <Route path="/create" element={<CreateStory />} />
       <Route path="/completed" element={<CompletedStories />} />
     </Routes>

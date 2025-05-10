@@ -30,3 +30,10 @@ export async function contributeParagraph(id, text) {
   );
   return res.json();
 }
+
+export async function voteParagraph(pid) {
+  const res = await fetch(`${VITE_API_URL}/api/paragraphs/${pid}/vote`, {
+    method: "POST",
+  });
+  return res.json();
+}

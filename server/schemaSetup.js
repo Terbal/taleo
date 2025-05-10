@@ -21,6 +21,7 @@ async function setupSchema() {
     creatorId: userRef.path, // stocke le chemin "users/user-test1"
     visibleCreator: false,
     voteIntervalHours: 12,
+    contributorLimit: 10,
     paragraphMin: 3,
     paragraphMax: 5,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
