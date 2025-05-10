@@ -1,3 +1,4 @@
+// server/firebase.js
 import admin from "firebase-admin";
 import fs from "fs";
 import path from "path";
@@ -5,7 +6,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 let serviceAccount;
-if (process.env.NODE_ENV === "production" && process.env.SERVICE_ACCOUNT_JSON) {
+
+if (process.env.SERVICE_ACCOUNT_JSON) {
+  // Si la variable est définie, on la parse (prod sur Render)
   try {
     serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_JSON);
   } catch (err) {
@@ -13,6 +16,7 @@ if (process.env.NODE_ENV === "production" && process.env.SERVICE_ACCOUNT_JSON) {
     process.exit(1);
   }
 } else {
+  // Sinon, on lit le fichier local (dev)
   const localPath = path.resolve(process.cwd(), "serviceAccountKey.json");
   if (!fs.existsSync(localPath)) {
     console.error("❌ Fichier local serviceAccountKey.json introuvable");

@@ -7,12 +7,24 @@ import { useNavigate } from "react-router-dom";
 const themes = ["Fantasy", "Mystery", "Sci-Fi", "Horror", "Romance"];
 
 export default function CreateStory() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: "",
+      theme: "",
+      paragraphMin: 3,
+      paragraphMax: 5,
+      voteIntervalHours: 12,
+    },
+  });
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/createStory`,
+      `${import.meta.env.VITE_API_URL}/api/stories`,
       data
     );
     navigate(`/story/${res.data.id}`);
@@ -25,17 +37,20 @@ export default function CreateStory() {
           <TextField
             fullWidth
             label="Titre"
-            {...register("title")}
+            {...register("title", { required: true })}
             margin="normal"
-            required
+            error={!!errors.title}
+            helperText={errors.title && "Le titre est requis"}
           />
           <TextField
             select
             fullWidth
             label="Thème"
-            {...register("theme")}
+            {...register("theme", { required: true })}
             margin="normal"
-            required
+            defaultValue=""
+            error={!!errors.theme}
+            helperText={errors.theme && "Le thème est requis"}
           >
             {themes.map((t) => (
               <MenuItem key={t} value={t}>
@@ -49,10 +64,8 @@ export default function CreateStory() {
                 fullWidth
                 type="number"
                 label="Min paragraphe"
-                {...register("paragraphMin")}
+                {...register("paragraphMin", { valueAsNumber: true, min: 1 })}
                 margin="normal"
-                defaultValue={3}
-                required
               />
             </Grid>
             <Grid item xs={6}>
@@ -60,10 +73,22 @@ export default function CreateStory() {
                 fullWidth
                 type="number"
                 label="Max paragraphe"
-                {...register("paragraphMax")}
+                {...register("paragraphMax", { valueAsNumber: true, min: 1 })}
                 margin="normal"
-                defaultValue={5}
-                required
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} mt={1}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Intervalle de vote (heures)"
+                {...register("voteIntervalHours", {
+                  valueAsNumber: true,
+                  min: 1,
+                })}
+                margin="normal"
               />
             </Grid>
           </Grid>

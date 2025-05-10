@@ -1,3 +1,4 @@
+// client/src/api/stories.js
 export async function getStories() {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/api/stories`);
   return res.json();
@@ -26,19 +27,6 @@ export async function contributeParagraph(id, text) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
     }
-  );
-  return res.json();
-}
-export async function getParagraphs(id) {
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/stories/${id}/paragraphs`
-  );
-  return res.json();
-}
-
-export async function getContributions(id) {
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/stories/${id}/contributions`
   );
   return res.json();
 }

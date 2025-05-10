@@ -1,18 +1,19 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { TextField, Button, Grid } from "@mui/material";
-import axios from "axios";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Grid, TextField, Button } from "@mui/material";
+import axios from "axios";
 
 export default function Contribute() {
   const { id } = useParams();
-  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
+  const [text, setText] = useState(""); // controlled input
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
     await axios.post(
       `${import.meta.env.VITE_API_URL}/api/stories/${id}/contribute`,
-      { text: data.text }
+      { text }
     );
     navigate(`/story/${id}`);
   };
@@ -20,13 +21,14 @@ export default function Contribute() {
   return (
     <Grid container justifyContent="center" mt={4}>
       <Grid item xs={11} sm={8} md={6}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <TextField
             fullWidth
             multiline
             rows={4}
             label="Votre paragraphe"
-            {...register("text")}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             margin="normal"
             required
           />
