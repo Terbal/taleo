@@ -4,11 +4,13 @@ import StoryDetail from "../pages/StoryDetail";
 import CreateStory from "../pages/CreateStory";
 import Contribute from "../pages/Contribute";
 import CompletedStories from "../pages/CompletedStories";
+import Login from "../pages/Login";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/story/:id" element={<StoryDetail />} />
       <Route path="/story/:id/contribute" element={<Contribute />} />
       <Route path="/create" element={<CreateStory />} />

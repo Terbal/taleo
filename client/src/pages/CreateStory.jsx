@@ -17,12 +17,15 @@ export default function CreateStory() {
       theme: "",
       paragraphMin: 3,
       paragraphMax: 5,
-      voteIntervalHours: 12,
+      contributorLimit: 3,
+      summary: "",
+      voteThreshold: 15, // <-- nouveau champ
     },
   });
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    // Note : votre backend doit maintenant accepter "voteThreshold" au lieu de voteIntervalHours
     const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/stories`,
       data
@@ -34,6 +37,7 @@ export default function CreateStory() {
     <Grid container justifyContent="center" mt={4}>
       <Grid item xs={11} sm={8} md={6}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Titre */}
           <TextField
             fullWidth
             label="Titre"
@@ -42,6 +46,8 @@ export default function CreateStory() {
             error={!!errors.title}
             helperText={errors.title && "Le titre est requis"}
           />
+
+          {/* Thème */}
           <TextField
             select
             fullWidth
@@ -58,13 +64,48 @@ export default function CreateStory() {
               </MenuItem>
             ))}
           </TextField>
+
+          {/* Limite de contributeurs */}
+          <TextField
+            fullWidth
+            type="number"
+            label="Nombre de contributeurs souhaité (max 10)"
+            {...register("contributorLimit", {
+              valueAsNumber: true,
+              required: true,
+              min: 1,
+              max: 10,
+            })}
+            margin="normal"
+            error={!!errors.contributorLimit}
+            helperText={
+              errors.contributorLimit && "Spécifiez un nombre entre 1 et 10"
+            }
+          />
+
+          {/* Résumé */}
+          <TextField
+            fullWidth
+            multiline
+            minRows={3}
+            label="Résumé ou direction de l’histoire"
+            {...register("summary", { required: true })}
+            margin="normal"
+            error={!!errors.summary}
+            helperText={errors.summary && "Le résumé est requis"}
+          />
+
+          {/* Min/Max paragraphe */}
           <Grid container spacing={2} mt={1}>
             <Grid item xs={6}>
               <TextField
                 fullWidth
                 type="number"
                 label="Min paragraphe"
-                {...register("paragraphMin", { valueAsNumber: true, min: 1 })}
+                {...register("paragraphMin", {
+                  valueAsNumber: true,
+                  min: 1,
+                })}
                 margin="normal"
               />
             </Grid>
@@ -73,18 +114,7 @@ export default function CreateStory() {
                 fullWidth
                 type="number"
                 label="Max paragraphe"
-                {...register("paragraphMax", { valueAsNumber: true, min: 1 })}
-                margin="normal"
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} mt={1}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                type="number"
-                label="Intervalle de vote (heures)"
-                {...register("voteIntervalHours", {
+                {...register("paragraphMax", {
                   valueAsNumber: true,
                   min: 1,
                 })}
@@ -92,6 +122,25 @@ export default function CreateStory() {
               />
             </Grid>
           </Grid>
+
+          {/* Seuil de votes pour valider un paragraphe */}
+          <TextField
+            fullWidth
+            type="number"
+            label="Seuil de votes pour valider un paragraphe"
+            {...register("voteThreshold", {
+              valueAsNumber: true,
+              required: true,
+              min: 1,
+            })}
+            margin="normal"
+            error={!!errors.voteThreshold}
+            helperText={
+              errors.voteThreshold && "Indiquez un nombre de votes valide"
+            }
+          />
+
+          {/* Bouton */}
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Créer l'histoire
           </Button>

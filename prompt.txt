@@ -1,0 +1,35 @@
+🟡 À faire maintenant (selon ton choix) :
+Tu es à un moment charnière où plusieurs voies sont possibles, selon ta priorité :
+
+🔔 1. Notifications Live
+Objectif : informer les utilisateurs en direct quand un paragraphe est validé.
+
+Méthodes possibles :
+
+WebSockets (Socket.IO) pour du temps réel.
+
+Polling toutes les X secondes (plus simple à mettre en place mais moins optimal).
+
+Firebase Cloud Messaging (FCM) si tu vises du push mobile plus tard.
+
+🧪 2. Tests Unitaires / Intégration
+Objectif : garantir la fiabilité de markFinished() et éviter les régressions.
+
+Tu pourrais utiliser Vitest ou Jest avec firebase-mock ou un Firestore émulé.
+
+📘 3. UI Finalisation
+Ajout de badges (nombre de votes, statut “en attente” / “validé”)
+
+Améliorer la navigation entre histoires terminées et actives
+
+Affichage du nombre de contributeurs restants
+
+Souhaites-tu qu’on commence :
+
+par mettre en place les notifications en live (Socket.io ou polling) ?
+
+ou plutôt rédiger des tests unitaires pour markFinished() ?
+
+ou encore améliorer l’interface utilisateur (comptes, badges, infos) ?
+
+Tu peux aussi me dire si tu veux que je t’aide à déployer scheduledVoteProcessing maintenant (si ce n’est pas encore fait).

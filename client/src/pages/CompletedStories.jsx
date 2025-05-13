@@ -1,3 +1,4 @@
+// client/src/pages/CompletedStories.jsx
 import React, { useEffect, useState } from "react";
 import { getStories } from "../../api/stories";
 import {
@@ -17,7 +18,6 @@ export default function CompletedStories() {
   useEffect(() => {
     getStories()
       .then((all) => {
-        // on considère qu'une histoire terminée a status === 'finished'
         setStories(all.filter((s) => s.status === "finished"));
       })
       .catch(console.error)
@@ -36,7 +36,6 @@ export default function CompletedStories() {
       </Grid>
     );
   }
-
   if (!stories.length) {
     return (
       <Typography p={4}>Aucune histoire terminée pour l’instant.</Typography>
@@ -52,6 +51,15 @@ export default function CompletedStories() {
               <Typography variant="h6">{s.title}</Typography>
               <Typography variant="body2" color="textSecondary">
                 Thème : {s.theme}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Contributeurs : {s.contributorsCount}/{s.contributorLimit}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Votes cumulés : {s.totalVotes}
+              </Typography>
+              <Typography variant="body2" mt={1} gutterBottom>
+                {s.summary}
               </Typography>
               <Button component={Link} to={`/story/${s.id}`} sx={{ mt: 2 }}>
                 Lire complète

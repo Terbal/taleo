@@ -39,6 +39,16 @@ export default function Home() {
               <Typography variant="body2" color="textSecondary">
                 Thème : {story.theme}
               </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Contributeurs : {story.contributorsCount}/
+                {story.contributorLimit}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Votes cumulés : {story.totalVotes || 0}
+              </Typography>
+              <Typography variant="body2" mt={1}>
+                {story.summary}
+              </Typography>
               <Typography variant="caption" display="block" gutterBottom>
                 Créée le{" "}
                 {new Date(story.createdAt.seconds * 1000).toLocaleDateString()}
