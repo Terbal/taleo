@@ -3,18 +3,21 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 import { StoriesProvider } from "./contexts/StoriesContext";
-import { ThemeProvider } from "./contexts/ThemeContext"; // ← TON provider
+import { ThemeProvider } from "./contexts/ThemeContext";
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "./contexts/AuthContext";
+import OAuthHandler from "./components/OAuthHandler";
 
 export default function App() {
   return (
     <ThemeProvider>
-      {" "}
-      {/* Utilise TON ThemeProvider */}
       <StoriesProvider>
         <BrowserRouter>
-          <Navbar />
-          <AppRoutes />
+          <AuthProvider>
+            <Navbar />
+            <OAuthHandler /> {/* Gère useNavigate ici */}
+            <AppRoutes />
+          </AuthProvider>
         </BrowserRouter>
       </StoriesProvider>
     </ThemeProvider>

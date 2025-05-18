@@ -3,13 +3,15 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function register(username, password) {
-  return axios.post(`${API_URL}/api/auth/register`, { username, password });
+// Inscription : on envoie email et password
+export async function register(email, password) {
+  return axios.post(`${API_URL}/api/auth/register`, { email, password });
 }
 
-export async function login(username, password) {
+// Connexion : on envoie email et password
+export async function login(email, password) {
   const res = await axios.post(`${API_URL}/api/auth/login`, {
-    username,
+    email,
     password,
   });
   const { token, expiresIn } = res.data;
@@ -18,10 +20,11 @@ export async function login(username, password) {
     "jwtExpiresAt",
     String(Date.now() + parseExpiry(expiresIn))
   );
+
   return res;
 }
 
-// Convertit "7d"/"1h"/"30m" en ms
+// Convertit "7d"/"1h"/"30m" en millisecondes
 function parseExpiry(str) {
   const unit = str.slice(-1);
   const num = parseInt(str.slice(0, -1), 10);
@@ -37,27 +40,30 @@ function parseExpiry(str) {
   }
 }
 
-// Configure axios
+// Configure axios pour inclure le JWT et gérer les erreurs
 axios.interceptors.request.use((cfg) => {
+  // Ne pas ajouter le token pour les routes d'authent
+  if (cfg.url?.includes("/api/auth/")) {
+    return cfg;
+  }
+
   const token = localStorage.getItem("jwt");
   const exp = parseInt(localStorage.getItem("jwtExpiresAt") || "0", 10);
   if (!token || Date.now() > exp) {
     localStorage.removeItem("jwt");
-    window.location.href = "/login"; // redirige si expiré
     return cfg;
   }
   cfg.headers.Authorization = `Bearer ${token}`;
   return cfg;
 });
 
-// Interceptor pour les 401
 axios.interceptors.response.use(
-  (r) => r,
-  (err) => {
-    if (err.response?.status === 401) {
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
       localStorage.removeItem("jwt");
       window.location.href = "/login";
     }
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
